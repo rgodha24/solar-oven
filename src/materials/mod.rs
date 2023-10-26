@@ -1,12 +1,9 @@
-use crate::trendline::LNTrendline;
+mod window;
+
+pub use window::*;
 
 pub enum ReflectiveMaterial {
     TinFoil,
-}
-
-pub enum WindowMaterial {
-    SingleMylar,
-    DoubleMylar,
 }
 
 pub enum Insulator {
@@ -31,29 +28,6 @@ impl ReflectiveMaterial {
     pub fn reflectivity(&self) -> f64 {
         match self {
             Self::TinFoil => 0.7,
-        }
-    }
-}
-
-impl WindowMaterial {
-    pub fn cost_per_m2(&self, m2: f64) -> f64 {
-        match self {
-            // TODO: find out the size of the mylar sheets
-            WindowMaterial::SingleMylar => 0.25,
-            WindowMaterial::DoubleMylar => 0.5,
-        }
-    }
-
-    pub fn uw(&self) -> LNTrendline {
-        match self {
-            WindowMaterial::SingleMylar => LNTrendline {
-                coefficient: 100.5092939,
-                intercept: -170.0073519,
-            },
-            WindowMaterial::DoubleMylar => LNTrendline {
-                coefficient: 100.5953534,
-                intercept: -96.79716142,
-            },
         }
     }
 }
