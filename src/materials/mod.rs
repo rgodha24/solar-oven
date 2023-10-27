@@ -2,18 +2,22 @@ mod window;
 
 pub use window::*;
 
+#[derive(Debug, Clone)]
 pub enum ReflectiveMaterial {
     TinFoil,
 }
 
+#[derive(Debug, Clone)]
 pub enum Insulator {
     Newspaper,
 }
 
+#[derive(Debug, Clone)]
 pub enum BodyMaterial {
     Cardboard,
 }
 
+#[derive(Debug, Clone)]
 pub enum Absorber {
     BlackConstructionPaper,
 }
@@ -51,7 +55,7 @@ impl Insulator {
             Self::Newspaper => 0.123,
         }
     }
-    pub fn cost_per_volume(&self, volume: f64) -> f64 {
+    pub fn cost_per_m3(&self, volume: f64) -> f64 {
         match self {
             Self::Newspaper => 0.,
         }

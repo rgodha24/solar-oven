@@ -1,5 +1,6 @@
 use crate::trendline::LNTrendline;
 
+#[derive(Debug, Clone)]
 pub enum WindowMaterial {
     SingleMylar,
     DoubleMylar,

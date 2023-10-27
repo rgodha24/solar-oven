@@ -3,6 +3,7 @@ use crate::trendline::LNTrendline;
 use crate::{materials::*, AMBIENT, OVEN_ANGLE, SOLAR_POWER_DENSITY, SUN_ANGLE};
 use linreg::linear_regression;
 
+#[derive(Debug, Clone)]
 pub struct Design {
     pub absorber: Absorber,
     pub l_and_w: f64,
@@ -17,11 +18,24 @@ pub struct Design {
     pub reflectors: ReflectiveMaterial,
     pub reflector_count: u8,
     pub reflector_ml: f64,
-    pub reflector_l: f64,
     pub reflector_type: ReflectorType,
 }
 
 impl Design {
+    pub fn ok(&self) -> bool {
+        self.l_and_w > 0.
+            && self.h > 0.
+            && self.inner_body_thickness > 0.
+            && self.insulator_thickness > 0.
+            && self.outer_body_thickness > 0.
+            && self.reflector_count > 0
+            && self.reflector_ml > 0.
+            && self.chamber_volume() > 0.001
+    }
+
+    fn chamber_volume(&self) -> f64 {
+        self.l_and_w * self.l_and_w * self.h
+    }
     fn usb(&self) -> f64 {
         // (x1/k1 + x2/k2 + x3/k3)^-1
 
@@ -55,11 +69,11 @@ impl Design {
         AMBIENT + num / denom
     }
 
-    fn aw(&self) -> f64 {
+    pub(crate) fn aw(&self) -> f64 {
         self.l_and_w * self.l_and_w
     }
 
-    fn asb(&self) -> f64 {
+    pub(crate) fn asb(&self) -> f64 {
         self.aw() + 4. * self.h * self.l_and_w
     }
 
@@ -112,7 +126,6 @@ mod tests {
             reflector_type: reflectors::ReflectorType::Rectangular,
             reflector_ml: 2.,
             reflectors: materials::ReflectiveMaterial::TinFoil,
-            reflector_l: 0.85,
         }
     }
 
