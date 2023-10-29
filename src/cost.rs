@@ -1,6 +1,16 @@
 use crate::design::Design;
+use crate::materials::*;
 
-impl Design {
+impl<RT, IBM, OBM, IM, WM, RM, AM> Design<RT, IBM, OBM, IM, WM, RM, AM>
+where
+    RT: ReflectorType,
+    IBM: BodyMaterial,
+    OBM: BodyMaterial,
+    IM: Insulator,
+    WM: Window,
+    RM: ReflectiveMaterial,
+    AM: Absorber,
+{
     fn absorber_cost(&self) -> f64 {
         let area = self.asb();
 

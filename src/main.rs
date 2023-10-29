@@ -1,11 +1,11 @@
 mod cost;
 mod design;
 mod materials;
-mod reflectors;
 mod trendline;
-use argmin::core::{CostFunction, Error, Executor, Gradient, State};
-use argmin::solver::gradientdescent::SteepestDescent;
-use argmin::solver::linesearch::MoreThuenteLineSearch;
+
+use crate::materials::*;
+use argmin::core::CostFunction;
+use itertools::iproduct;
 use std::fmt::Display;
 
 pub use design::Design;
@@ -17,7 +17,9 @@ pub const SUN_ANGLE: f64 = 0.872664626;
 /// pi/2 - sun_angle (in radians)
 pub const OVEN_ANGLE: f64 = 1.5707963268 - SUN_ANGLE;
 
-struct Oven {}
+struct Oven<RT, IBM, OBM, IM, WM, RM, AM> {
+    _phantom: std::marker::PhantomData<(RT, IBM, OBM, IM, WM, RM, AM)>,
+}
 
 #[derive(Debug)]
 enum OvenError {
@@ -34,8 +36,17 @@ impl Display for OvenError {
     }
 }
 
-impl CostFunction for Oven {
-    type Param = Design;
+impl<RT, IBM, OBM, IM, WM, RM, AM> CostFunction for Oven<RT, IBM, OBM, IM, WM, RM, AM>
+where
+    RT: ReflectorType,
+    IBM: BodyMaterial,
+    OBM: BodyMaterial,
+    IM: Insulator,
+    WM: Window,
+    RM: ReflectiveMaterial,
+    AM: Absorber,
+{
+    type Param = Design<RT, IBM, OBM, IM, WM, RM, AM>;
     type Output = f64;
 
     fn cost(&self, design: &Self::Param) -> Result<Self::Output, argmin::core::Error> {
@@ -51,24 +62,69 @@ impl CostFunction for Oven {
 
 fn main() {
     let design = Design {
-        absorber: materials::Absorber::BlackConstructionPaper,
-        window: materials::WindowMaterial::DoubleMylar,
-        l_and_w: 0.085,
+        absorber: BlackConstructionPaper {},
+        inner_body: Cardboard {},
+        reflectors: TinFoil {},
         h: 0.1,
-        outer_body: materials::BodyMaterial::Cardboard,
-        outer_body_thickness: 0.004,
-        inner_body: materials::BodyMaterial::Cardboard,
-        inner_body_thickness: 0.004,
-        insulator: materials::Insulator::Newspaper,
-        insulator_thickness: 0.135,
+        l_and_w: 0.85,
+        window: SingleMylar {},
+        insulator: Newspaper {},
+        outer_body: Cardboard {},
+        reflector_ml: 2.,
+        reflector_type: Rectangular {},
         reflector_count: 4,
-        reflector_type: reflectors::ReflectorType::Rectangular,
-        reflector_ml: 3.,
-        reflectors: materials::ReflectiveMaterial::TinFoil,
+        insulator_thickness: 0.135,
+        inner_body_thickness: 0.04,
+        outer_body_thickness: 0.04,
     };
 
+    let absorbers = vec![BlackConstructionPaper {}].into_iter();
+    let inner_bodies = vec![Cardboard {}].into_iter();
+    let reflectors = vec![TinFoil {}].into_iter();
+    let windows = vec![SingleMylar {}].into_iter();
+    let insulators = vec![Newspaper {}].into_iter();
+    let outer_bodies = vec![Cardboard {}].into_iter();
+    let reflector_types = vec![Rectangular {}].into_iter();
+
+    let iter = iproduct!(
+        absorbers,
+        inner_bodies,
+        reflectors,
+        windows,
+        insulators,
+        outer_bodies,
+        reflector_types
+    );
+
+    for (a, ib, r, w, ins, ob, rt) in iter {
+        let design = Design {
+            absorber: a,
+            inner_body: ib,
+            reflectors: r,
+            h: 0.1,
+            l_and_w: 0.85,
+            window: w,
+            insulator: ins,
+            outer_body: ob,
+            reflector_ml: 2.,
+            reflector_type: rt,
+            reflector_count: 4,
+            insulator_thickness: 0.135,
+            inner_body_thickness: 0.04,
+            outer_body_thickness: 0.04,
+        };
+
+        if design.ok() {
+            println!(
+                "predicted tio: {} cost: ${}",
+                design.predicted_tio(),
+                design.total_cost()
+            );
+        }
+    }
+
     println!(
-        "tio: {} with cost ${}",
+        "predicted tio: {} cost: ${}",
         design.predicted_tio(),
         design.total_cost()
     );
