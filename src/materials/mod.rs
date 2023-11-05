@@ -1,23 +1,25 @@
 mod window;
 
+use std::fmt::Display;
+
 pub use window::*;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum ReflectiveMaterial {
     TinFoil,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum Insulator {
     Newspaper,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum BodyMaterial {
     Cardboard,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum Absorber {
     BlackConstructionPaper,
 }
@@ -34,6 +36,10 @@ impl ReflectiveMaterial {
             Self::TinFoil => 0.7,
         }
     }
+
+    pub fn variants() -> &'static [Self] {
+        &[Self::TinFoil]
+    }
 }
 
 impl Absorber {
@@ -42,10 +48,14 @@ impl Absorber {
             Self::BlackConstructionPaper => 0.9,
         }
     }
+
     pub fn cost_per_m2(&self, m2: f64) -> f64 {
         match self {
             Self::BlackConstructionPaper => 0.5 * m2,
         }
+    }
+    pub fn variants() -> &'static [Self] {
+        &[Self::BlackConstructionPaper]
     }
 }
 
@@ -60,6 +70,9 @@ impl Insulator {
             Self::Newspaper => 0.,
         }
     }
+    pub fn variants() -> &'static [Self] {
+        &[Self::Newspaper]
+    }
 }
 
 impl BodyMaterial {
@@ -71,6 +84,38 @@ impl BodyMaterial {
     pub fn cost_per_m2(&self, m2: f64) -> f64 {
         match self {
             Self::Cardboard => 1.75 * m2,
+        }
+    }
+    pub fn variants() -> &'static [Self] {
+        &[Self::Cardboard]
+    }
+    pub fn thickness(&self) -> f64 {
+        match self {
+            Self::Cardboard => 0.004,
+        }
+    }
+}
+
+impl Display for ReflectiveMaterial {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ReflectiveMaterial::TinFoil => write!(f, "Tin Foil"),
+        }
+    }
+}
+
+impl Display for BodyMaterial {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            BodyMaterial::Cardboard => write!(f, "Cardboard"),
+        }
+    }
+}
+
+impl Display for Insulator {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Insulator::Newspaper => write!(f, "Newspaper"),
         }
     }
 }

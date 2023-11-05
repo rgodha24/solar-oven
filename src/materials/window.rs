@@ -1,6 +1,8 @@
+use std::fmt::Display;
+
 use crate::trendline::LNTrendline;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum WindowMaterial {
     SingleMylar,
     DoubleMylar,
@@ -9,6 +11,9 @@ pub enum WindowMaterial {
 type UWGraph = (f64, f64);
 
 impl WindowMaterial {
+    pub fn variants() -> &'static [Self] {
+        &[Self::SingleMylar, Self::DoubleMylar]
+    }
     pub fn cost_per_m2(&self, m2: f64) -> f64 {
         match self {
             // TODO: find out the size of the mylar sheets
@@ -57,6 +62,15 @@ impl WindowMaterial {
         match self {
             WindowMaterial::SingleMylar => 0.92,
             WindowMaterial::DoubleMylar => (0.92_f64).powi(2),
+        }
+    }
+}
+
+impl Display for WindowMaterial {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            WindowMaterial::SingleMylar => write!(f, "Single Mylar"),
+            WindowMaterial::DoubleMylar => write!(f, "Double Mylar"),
         }
     }
 }

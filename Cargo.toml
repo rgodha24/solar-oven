@@ -6,5 +6,11 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-argmin = "0.8.1"
+argmin = { version = "0.8.1", features = ["slog-logger", "rayon"] }
+argmin-math = { version = "0.3.0", features = ["ndarray_latest-serde"] }
+cobyla = "0.5.1"
+itertools = "0.11.0"
 linreg = "0.2.0"
+ndarray = "0.15.6"
+rayon = "1.8.0"
+serde = { version = "1.0.190", features = ["derive"] }

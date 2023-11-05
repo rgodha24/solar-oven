@@ -9,11 +9,9 @@ pub struct Design {
     pub l_and_w: f64,
     pub h: f64,
     pub inner_body: BodyMaterial,
-    pub inner_body_thickness: f64,
     pub insulator: Insulator,
     pub insulator_thickness: f64,
     pub outer_body: BodyMaterial,
-    pub outer_body_thickness: f64,
     pub window: WindowMaterial,
     pub reflectors: ReflectiveMaterial,
     pub reflector_count: u8,
@@ -25,12 +23,11 @@ impl Design {
     pub fn ok(&self) -> bool {
         self.l_and_w > 0.
             && self.h > 0.
-            && self.inner_body_thickness > 0.
             && self.insulator_thickness > 0.
-            && self.outer_body_thickness > 0.
             && self.reflector_count > 0
             && self.reflector_ml > 0.
-            && self.chamber_volume() > 0.001
+            && (self.reflector_ml - 3.).abs() < 0.001
+            && (self.chamber_volume() - 0.001).abs() < 1e-8
     }
 
     fn chamber_volume(&self) -> f64 {
@@ -39,9 +36,9 @@ impl Design {
     fn usb(&self) -> f64 {
         // (x1/k1 + x2/k2 + x3/k3)^-1
 
-        let iw = self.inner_body_thickness / self.inner_body.conductivity();
+        let iw = self.inner_body.thickness() / self.inner_body.conductivity();
         let c = self.insulator_thickness / self.insulator.conductivity();
-        let ow = self.outer_body_thickness / self.outer_body.conductivity();
+        let ow = self.outer_body.thickness() / self.outer_body.conductivity();
 
         let sum = iw + c + ow;
 
@@ -105,6 +102,13 @@ impl Design {
 
         tio_line.y_intercept(&window_line)
     }
+
+    pub fn score(&self) -> f64 {
+        let tio = self.predicted_tio();
+        let cost = self.total_cost();
+
+        (tio - AMBIENT) / cost
+    }
 }
 
 #[cfg(test)]
@@ -117,9 +121,7 @@ mod tests {
             l_and_w: 0.085,
             h: 0.1,
             outer_body: materials::BodyMaterial::Cardboard,
-            outer_body_thickness: 0.004,
             inner_body: materials::BodyMaterial::Cardboard,
-            inner_body_thickness: 0.004,
             insulator: materials::Insulator::Newspaper,
             insulator_thickness: 0.135,
             reflector_count: 4,

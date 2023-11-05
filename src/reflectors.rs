@@ -1,6 +1,6 @@
 use crate::Design;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum ReflectorType {
     Rectangular,
     // Trapezoidal
@@ -18,6 +18,10 @@ impl ReflectorType {
         match self {
             Self::Rectangular => (ml * window) * window * (n as f64),
         }
+    }
+
+    pub fn variants() -> &'static [Self] {
+        &[Self::Rectangular]
     }
 }
 

@@ -18,10 +18,10 @@ impl Design {
         // outer_volume = (h + i_b_t + i_t) * (l_and_w + i_b_t + i_t) ^ 2
         // insulator_volume = outer_volume - inner_volume
 
-        let inner_volume = (self.h + self.inner_body_thickness)
-            * (self.l_and_w + self.inner_body_thickness).powi(2);
-        let outer_volume = (self.h + self.inner_body_thickness + self.insulator_thickness)
-            * (self.l_and_w + self.inner_body_thickness + self.insulator_thickness).powi(2);
+        let inner_volume = (self.h + self.inner_body.thickness())
+            * (self.l_and_w + self.inner_body.thickness()).powi(2);
+        let outer_volume = (self.h + self.inner_body.thickness() + self.insulator_thickness)
+            * (self.l_and_w + self.inner_body.thickness() + self.insulator_thickness).powi(2);
 
         let insulator_volume = outer_volume - inner_volume;
 
@@ -30,8 +30,8 @@ impl Design {
 
     fn outer_body_cost(&self) -> f64 {
         // surface area - l_and_w ^ 2
-        let h = self.h + self.inner_body_thickness + self.insulator_thickness;
-        let l = self.l_and_w + self.inner_body_thickness + self.insulator_thickness;
+        let h = self.h + self.inner_body.thickness() + self.insulator_thickness;
+        let l = self.l_and_w + self.inner_body.thickness() + self.insulator_thickness;
         let w = l.clone();
 
         let surface_area = 2. * h * l + 2. * h * w + l * w;
