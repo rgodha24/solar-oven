@@ -1,8 +1,6 @@
 use std::fmt::Display;
 
-use crate::reflectors::ReflectorType;
-use crate::trendline::LNTrendline;
-use crate::{materials::*, Oven, AMBIENT, GOAL_TIO, OVEN_ANGLE, SOLAR_POWER_DENSITY, SUN_ANGLE};
+use crate::*;
 use linreg::linear_regression;
 
 #[derive(Debug, Clone)]
@@ -117,6 +115,13 @@ impl Design {
         // ((tio - AMBIENT) / cost).recip()
 
         // tio.recip()
+    }
+
+    pub fn performance_index(&self) -> f64 {
+        let tio = self.predicted_tio();
+        let cost = self.total_cost();
+
+        (tio - AMBIENT) / cost
     }
 }
 

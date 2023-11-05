@@ -1,8 +1,9 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
-use crate::trendline::LNTrendline;
+use crate::LNTrendline;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum WindowMaterial {
     SingleMylar,
     DoubleMylar,

@@ -1,4 +1,4 @@
-use crate::design::Design;
+use crate::Design;
 
 impl Design {
     fn absorber_cost(&self) -> f64 {

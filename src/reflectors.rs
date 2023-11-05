@@ -1,6 +1,7 @@
 use crate::Design;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum ReflectorType {
     Rectangular,
     // Trapezoidal

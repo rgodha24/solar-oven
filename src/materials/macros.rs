@@ -1,7 +1,7 @@
 #[macro_export]
 macro_rules! common {
     ($ty:ident, $($name:ident, $pretty:expr);+) => {
-        #[derive(Debug, Clone, Copy)]
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
         pub enum $ty {
             $($name),+
         }
@@ -18,7 +18,7 @@ macro_rules! common {
         }
 
         impl $ty {
-            pub fn variants() -> &'static [Self] {
+            pub const fn variants() -> &'static [Self] {
                 &[$(Self::$name),+]
             }
         }
