@@ -111,18 +111,27 @@ impl Design {
         let tio = self.predicted_tio();
         let cost = self.total_cost();
 
-        (GOAL_TIO - tio).abs() + cost * 8.
+        // we want to get to at least 400F to cook the food correctly
+        (GOAL_TIO - tio).abs() + cost * 1.5
+
+        // ((tio - AMBIENT) / cost).recip()
+
+        // tio.recip()
     }
 }
 
 impl Display for Design {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "Absorber: {}", self.absorber)?;
-        writeln!(f, "L and W: {:.4}", self.l_and_w)?;
-        writeln!(f, "H: {:.4}", self.h)?;
+        writeln!(f, "L and W: {:.4} cm", self.l_and_w * 100.)?;
+        writeln!(f, "H: {:.4} cm", self.h * 100.)?;
         writeln!(f, "Inner Body: {:.4}", self.inner_body)?;
         writeln!(f, "Insulator: {}", self.insulator)?;
-        writeln!(f, "Insulator Thickness: {:.4}", self.insulator_thickness)?;
+        writeln!(
+            f,
+            "Insulator Thickness: {:.4} cm",
+            self.insulator_thickness * 100.
+        )?;
         writeln!(f, "Outer Body: {:.4}", self.outer_body)?;
         writeln!(f, "Window: {}", self.window)?;
         writeln!(f, "Reflectors: {}", self.reflectors)?;
@@ -130,7 +139,7 @@ impl Display for Design {
         writeln!(f, "Reflector ML: {:.4}", self.reflector_ml)?;
         writeln!(f, "Reflector Type: {:?}", self.reflector_type)?;
         writeln!(f, "Cost: ${:.4}", self.total_cost())?;
-        writeln!(f, "Temp: {:.4}", self.predicted_tio())
+        writeln!(f, "Temp: {:.4}°C", self.predicted_tio())
     }
 }
 
