@@ -74,8 +74,7 @@ impl Design {
         self.aw() + 4. * self.h * self.l_and_w
     }
 
-    // TODO: does this work with only 2 tested numbers
-    pub fn tio_line(&self) -> LNTrendline {
+    pub fn tio_line(&self) -> Result<LNTrendline, ()> {
         // x
         let uws: Vec<_> = self.window.uws().into_iter().map(|n| n.0.ln()).collect();
 
@@ -88,19 +87,21 @@ impl Design {
             .map(|n| self.tio_at_uw(n))
             .collect();
 
-        let (a, b) = linear_regression(&uws, &tios).unwrap();
+        let (a, b) = linear_regression(&uws, &tios).map_err(|_| ())?;
 
-        LNTrendline {
+        Ok(LNTrendline {
             coefficient: a,
             intercept: b,
-        }
+        })
     }
 
     pub fn predicted_tio(&self) -> f64 {
         let tio_line = self.tio_line();
         let window_line = self.window.uw_line();
 
-        tio_line.y_intercept(&window_line)
+        tio_line
+            .map(|l| l.y_intercept(&window_line))
+            .unwrap_or(AMBIENT)
     }
 
     pub fn score(&self) -> f64 {
