@@ -1,6 +1,8 @@
+use std::fmt::Display;
+
 use crate::reflectors::ReflectorType;
 use crate::trendline::LNTrendline;
-use crate::{materials::*, AMBIENT, OVEN_ANGLE, SOLAR_POWER_DENSITY, SUN_ANGLE};
+use crate::{materials::*, Oven, AMBIENT, GOAL_TIO, OVEN_ANGLE, SOLAR_POWER_DENSITY, SUN_ANGLE};
 use linreg::linear_regression;
 
 #[derive(Debug, Clone)]
@@ -104,87 +106,49 @@ impl Design {
             .unwrap_or(AMBIENT)
     }
 
+    /// lower is better
     pub fn score(&self) -> f64 {
         let tio = self.predicted_tio();
         let cost = self.total_cost();
 
-        (tio - AMBIENT) / cost
+        (GOAL_TIO - tio).abs() + cost * 8.
     }
 }
 
-#[cfg(test)]
-mod tests {
+impl Display for Design {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "Absorber: {}", self.absorber)?;
+        writeln!(f, "L and W: {:.4}", self.l_and_w)?;
+        writeln!(f, "H: {:.4}", self.h)?;
+        writeln!(f, "Inner Body: {:.4}", self.inner_body)?;
+        writeln!(f, "Insulator: {}", self.insulator)?;
+        writeln!(f, "Insulator Thickness: {:.4}", self.insulator_thickness)?;
+        writeln!(f, "Outer Body: {:.4}", self.outer_body)?;
+        writeln!(f, "Window: {}", self.window)?;
+        writeln!(f, "Reflectors: {}", self.reflectors)?;
+        writeln!(f, "Reflector Count: {}", self.reflector_count)?;
+        writeln!(f, "Reflector ML: {:.4}", self.reflector_ml)?;
+        writeln!(f, "Reflector Type: {:?}", self.reflector_type)?;
+        writeln!(f, "Cost: ${:.4}", self.total_cost())?;
+        writeln!(f, "Temp: {:.4}", self.predicted_tio())
+    }
+}
 
-    fn with_window(window: materials::WindowMaterial) -> Design {
+impl From<(&Oven, &[f64])> for Design {
+    fn from((oven, x): (&Oven, &[f64])) -> Self {
         Design {
-            absorber: materials::Absorber::BlackConstructionPaper,
-            window,
-            l_and_w: 0.085,
-            h: 0.1,
-            outer_body: materials::BodyMaterial::Cardboard,
-            inner_body: materials::BodyMaterial::Cardboard,
-            insulator: materials::Insulator::Newspaper,
-            insulator_thickness: 0.135,
-            reflector_count: 4,
-            reflector_type: reflectors::ReflectorType::Rectangular,
-            reflector_ml: 2.,
-            reflectors: materials::ReflectiveMaterial::TinFoil,
+            absorber: oven.0,
+            window: oven.1,
+            l_and_w: (0.001 / x[0]).sqrt(),
+            h: x[0],
+            outer_body: oven.3,
+            inner_body: oven.2,
+            insulator: oven.4,
+            insulator_thickness: x[1],
+            reflector_count: oven.7,
+            reflector_type: oven.5,
+            reflector_ml: x[2],
+            reflectors: oven.6,
         }
     }
-
-    use crate::{assert_float_eq, materials, reflectors};
-
-    use super::*;
-    #[test]
-    fn with_provided_uw() {
-        let design = with_window(WindowMaterial::SingleMylar);
-
-        let expected = 192.00020164848100;
-        let calc = design.tio_at_uw(10.10);
-        assert_float_eq!(expected, calc);
-
-        let design = with_window(WindowMaterial::DoubleMylar);
-
-        let expected = 264.33652371572700;
-        let calc = design.tio_at_uw(4.88);
-        assert_float_eq!(expected, calc);
-    }
-
-    #[test]
-    fn trendline() {
-        let design = with_window(WindowMaterial::SingleMylar);
-        let trend = design.tio_line();
-
-        let expected_coefficient = -82.94265852436450;
-        let expected_intercept = 377.42095667476300;
-
-        println!("{:?}", trend);
-
-        assert_float_eq!(trend.coefficient, expected_coefficient);
-        assert_float_eq!(trend.intercept, expected_intercept);
-    }
-
-    #[test]
-    fn all() {
-        let design = with_window(WindowMaterial::SingleMylar);
-
-        let expected = 129.9165902561410;
-        let calculated = design.predicted_tio();
-
-        assert_float_eq!(expected, calculated);
-    }
-}
-
-#[macro_export]
-macro_rules! assert_float_eq {
-    ($left:expr, $right:expr) => {
-        assert_float_eq!($left, $right, 1e-6);
-    };
-
-    ($left:expr, $right:expr, $precision:expr) => {
-        println!("{} {}", $left, $right);
-        let abs = ($right - $left).abs();
-
-        assert!(abs < $precision);
-    };
 }

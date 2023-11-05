@@ -14,9 +14,11 @@ impl ReflectorType {
         }
     }
 
-    pub fn area(&self, ml: f64, window: f64, n: u8) -> f64 {
+    pub fn area(&self, ml: f64, window: f64, n_reflectors: u8) -> f64 {
+        let reflector_length = ml * window;
         match self {
-            Self::Rectangular => (ml * window) * window * (n as f64),
+            // reflector_length * reflector_width * n_reflectors
+            Self::Rectangular => reflector_length * window * (n_reflectors as f64),
         }
     }
 
