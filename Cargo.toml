@@ -12,6 +12,10 @@ itertools = "0.11.0"
 linreg = "0.2.0"
 rayon = "1.8.0"
 serde = "1.0.190"
+serde_json = "1.0.108"
+specta = { version = "1.0.5", features = ["typescript", "export"] }
+tokio = "1.33.0"
+vercel_runtime = "1.1.0"
 
 [lib]
 path = "src-rs/lib.rs"
@@ -19,3 +23,7 @@ path = "src-rs/lib.rs"
 [[bin]]
 name = "optimize"
 path = "src-rs/optimize.rs"
+
+[[bin]]
+name = "graph"
+path = "api/graph.rs"

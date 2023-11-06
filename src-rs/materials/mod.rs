@@ -26,9 +26,10 @@ impl_reflective!(
 
 impl_insulator!(
     N, "Newspaper", 0., 0.123;
-    FG, "Fiberglass Insulation", 83.15, 0.0068384615;
+    FG, "Fiberglass Insulation", 83.15, 0.076923077;
     SF, "Spray Foam", 19612.13, 0.039;
-    DF, "Down Feather", 485.57, 0.045
+    DF, "Down Feather", 485.57, 0.045;
+    FG30, "R30 Fiberglass", 76.60, 0.03333333333
 );
 
 impl_body!(

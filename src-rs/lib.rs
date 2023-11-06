@@ -7,7 +7,7 @@ mod trendline;
 
 pub use design::Design;
 pub use materials::*;
-pub use oven::{score, Oven};
+pub use oven::{score, GraphDataResponse, Oven};
 pub use reflectors::ReflectorType;
 pub use trendline::LNTrendline;
 

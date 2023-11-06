@@ -1,11 +1,12 @@
 use cobyla::{minimize, Func, RhoBeg};
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
 use crate::{
     Absorber, BodyMaterial, Design, Insulator, ReflectiveMaterial, ReflectorType, WindowMaterial,
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Type)]
 pub struct Oven(
     pub Absorber,
     pub WindowMaterial,
@@ -83,7 +84,7 @@ impl Oven {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Type)]
 pub enum GraphDataResponse {
     Tio,
     Cost,

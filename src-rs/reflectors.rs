@@ -1,10 +1,11 @@
 use crate::Design;
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Type)]
 pub enum ReflectorType {
     Rectangular,
-    // Trapezoidal
+    Trapezoidal,
 }
 
 impl ReflectorType {
@@ -12,6 +13,13 @@ impl ReflectorType {
     pub fn calc_gain(&self, count: u8, reflectivity: f64, reflector_ml: f64, alpha: f64) -> f64 {
         match self {
             Self::Rectangular => 1. + (count as f64) * reflectivity * reflector_ml * alpha.sin(),
+            Self::Trapezoidal => {
+                1. + (count as f64)
+                    * reflectivity
+                    * reflector_ml
+                    * alpha.sin()
+                    * (1. + reflector_ml * alpha.sin())
+            }
         }
     }
 
@@ -20,11 +28,14 @@ impl ReflectorType {
         match self {
             // reflector_length * reflector_width * n_reflectors
             Self::Rectangular => reflector_length * window * (n_reflectors as f64),
+            Self::Trapezoidal => {
+                ((reflector_length).powi(2) - window.powi(2)) * (n_reflectors as f64) / 4.
+            }
         }
     }
 
     pub fn variants() -> &'static [Self] {
-        &[Self::Rectangular]
+        &[Self::Rectangular, Self::Trapezoidal]
     }
 }
 

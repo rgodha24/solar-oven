@@ -8,6 +8,11 @@ fn main() {
 
     let variants = variants();
 
+    println!(
+        "{:?}",
+        variants[0].0.graph_data(3.0, GraphDataResponse::Tio)
+    );
+
     let variant_count = variants.len();
     let pb = ProgressBar::new(variant_count as u64);
 
