@@ -7,6 +7,8 @@ it uses the awesome [cobyla](https://docs.rs/cobyla) algo to optimize designs
 
 there is a ton of cloning in here that could be removed to increase performance, but it's already fast enough and im lazy.
 
+to run the program, make sure [cargo is installed](https://rustup.rs), then run cargo run --bin optimize --release
+
 Best 3 designs of 26880: 
 
 score: 52.16541348347276 
