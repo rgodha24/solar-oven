@@ -1,4 +1,4 @@
-import { graph_data, Oven, GraphDataResponse, GraphData, oven_from_json } from 'solar-oven';
+import { graph_data, GraphDataResponse, GraphData, oven_from_json } from 'solar-oven';
 import type { Oven as JSONOven } from './types';
 
 let data: GraphData[] | null;
