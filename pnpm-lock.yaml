@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  scichart:
+    specifier: ^3.2.509
+    version: 3.2.509
   solar-oven:
     specifier: link:pkg
     version: link:pkg
@@ -16,6 +19,9 @@ devDependencies:
   '@sveltejs/kit':
     specifier: ^1.20.4
     version: 1.27.3(svelte@4.2.2)(vite@4.5.0)
+  '@types/plotly.js':
+    specifier: ^2.12.30
+    version: 2.12.30
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.0.0
     version: 6.9.1(@typescript-eslint/parser@6.9.1)(eslint@8.53.0)(typescript@5.2.2)
@@ -605,6 +611,10 @@ packages:
 
   /@types/json-schema@7.0.14:
     resolution: {integrity: sha512-U3PUjAudAdJBeC2pgN8uTIKgxrb4nlDF3SF0++EldXQvQBGkpFZMSnwQiIoDU77tv45VgNkl/L4ouD+rEomujw==}
+    dev: true
+
+  /@types/plotly.js@2.12.30:
+    resolution: {integrity: sha512-/yeGIFTrh5e5Q9HUCVZWDwwxqGyWHYsi4IVhG/1YKaOScslMlimLBIoce/F/Tjw7YahRTbh4xHNDfGxvq51w7Q==}
     dev: true
 
   /@types/pug@2.0.8:
@@ -1732,6 +1742,10 @@ packages:
       mkdirp: 0.5.6
       rimraf: 2.7.1
     dev: true
+
+  /scichart@3.2.509:
+    resolution: {integrity: sha512-TMHBn2wP7Nr7DTWQIrsmicG+1BfkhUeLTPi4w+Ho9dedV+i0fruEqEL1J5hORh3EFt9Z0Qg/8P+G+x0QTFYlVA==}
+    dev: false
 
   /semver@7.5.4:
     resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}

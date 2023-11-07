@@ -21,8 +21,8 @@ impl WindowMaterial {
     pub fn cost_per_m2(&self, m2: f64) -> f64 {
         match self {
             // TODO: find out the size of the mylar sheets
-            WindowMaterial::SingleMylar => 0.25,
-            WindowMaterial::DoubleMylar => 0.5,
+            WindowMaterial::SingleMylar => 4.1443933155 * m2,
+            WindowMaterial::DoubleMylar =>  4.1443933155 * 2. * m2,
         }
     }
 
