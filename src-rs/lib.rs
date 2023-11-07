@@ -21,7 +21,7 @@ pub const SUN_ANGLE: f64 = 0.872664626;
 /// pi/2 - sun_angle (in radians)
 pub const OVEN_ANGLE: f64 = 1.5707963268 - SUN_ANGLE;
 /// 400 F in Celsius
-pub const GOAL_TIO: f64 = 204.4444444444;
+pub const GOAL_TIO: f64 = 250.;
 
 const INITIALS: &'static [[f64; 3]] = &[[0.1, 0.1, 3.] /* [0.4, 1.5, 3.] */];
 

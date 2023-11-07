@@ -110,7 +110,7 @@ impl Design {
         let cost = self.total_cost();
 
         // we want to get to at least 400F to cook the food correctly
-        (GOAL_TIO - tio).abs() + cost * 15.
+        (GOAL_TIO - tio).abs() + cost * 4.
 
         // ((tio - AMBIENT) / cost).recip()
 
