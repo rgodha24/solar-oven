@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  solar-oven:
+    specifier: link:pkg
+    version: link:pkg
+
 devDependencies:
   '@sveltejs/adapter-auto':
     specifier: ^2.0.0
@@ -47,6 +52,9 @@ devDependencies:
   vite:
     specifier: ^4.4.2
     version: 4.5.0
+  vite-plugin-wasm:
+    specifier: ^3.2.2
+    version: 3.2.2(vite@4.5.0)
 
 packages:
 
@@ -1857,6 +1865,14 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+    dev: true
+
+  /vite-plugin-wasm@3.2.2(vite@4.5.0):
+    resolution: {integrity: sha512-cdbBUNR850AEoMd5nvLmnyeq63CSfoP1ctD/L2vLk/5+wsgAPlAVAzUK5nGKWO/jtehNlrSSHLteN+gFQw7VOA==}
+    peerDependencies:
+      vite: ^2 || ^3 || ^4
+    dependencies:
+      vite: 4.5.0
     dev: true
 
   /vite@4.5.0:

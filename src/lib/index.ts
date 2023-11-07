@@ -1,10 +1,22 @@
-import type { Payload } from './types';
+import { graph_data, Oven, GraphDataResponse, GraphData, oven_from_json } from 'solar-oven';
+import type { Oven as JSONOven } from './types';
 
-export async function getGraphData(payload: Payload): Promise<[number, number, number][]> {
-  let res = await fetch('/api/graph', {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  }).catch(console.error);
+let data: GraphData[] | null;
 
-  return (await res?.json()) || [];
+export function getData(o: JSONOven) {
+	const oven = oven_from_json(JSON.stringify(o));
+	if (!oven) {
+		return [];
+	}
+
+	let responseType: GraphDataResponse = GraphDataResponse.Tio;
+	let reflectorML = 3.0;
+
+	data?.forEach((d) => d.free());
+
+	data = graph_data(oven, responseType, reflectorML);
+
+	oven.free();
+
+	return data;
 }

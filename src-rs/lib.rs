@@ -1,5 +1,6 @@
 mod cost;
 mod design;
+pub mod export;
 mod materials;
 mod oven;
 mod reflectors;
@@ -35,7 +36,27 @@ pub fn variants() -> Vec<(Oven, [f64; 3])> {
         ReflectiveMaterial::variants(),
         1..=4u8
     ])
-    .map(|(&a, &w, &ob, &ib, &ins, &rt, &rm, rn)| Oven(a, w, ob, ib, ins, rt, rm, rn))
+    .map(
+        |(
+            &abs,
+            &window,
+            &outer_body,
+            &inner_body,
+            &insulator,
+            &reflector_type,
+            &reflective_material,
+            reflector_number,
+        )| Oven {
+            abs,
+            window,
+            outer_body,
+            inner_body,
+            insulator,
+            reflector_type,
+            reflective_material,
+            reflector_number,
+        },
+    )
     .cartesian_product(INITIALS.iter().cloned())
     .collect()
 }

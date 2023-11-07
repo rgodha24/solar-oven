@@ -1,10 +1,12 @@
 use serde::{Deserialize, Serialize};
-use specta::Type;
 use std::fmt::Display;
+use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::LNTrendline;
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash, Type)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[wasm_bindgen]
+#[cfg_attr(not(target_arch = "wasm32"), derive(specta::Type))]
 pub enum WindowMaterial {
     SingleMylar,
     DoubleMylar,

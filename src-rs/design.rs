@@ -151,18 +151,18 @@ impl Display for Design {
 impl From<(&Oven, &[f64])> for Design {
     fn from((oven, x): (&Oven, &[f64])) -> Self {
         Design {
-            absorber: oven.0,
-            window: oven.1,
+            absorber: oven.abs,
+            window: oven.window,
             l_and_w: (0.001 / x[0]).sqrt(),
             h: x[0],
-            outer_body: oven.3,
-            inner_body: oven.2,
-            insulator: oven.4,
+            outer_body: oven.outer_body,
+            inner_body: oven.inner_body,
+            insulator: oven.insulator,
             insulator_thickness: x[1],
-            reflector_count: oven.7,
-            reflector_type: oven.5,
+            reflector_count: oven.reflector_number,
+            reflector_type: oven.reflector_type,
             reflector_ml: x[2],
-            reflectors: oven.6,
+            reflectors: oven.reflective_material,
         }
     }
 }

@@ -6,24 +6,28 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cobyla = "0.5.1"
+getrandom = { version = "0.2.10", features = ["js"] }
 indicatif = "0.17.7"
 itertools = "0.11.0"
 linreg = "0.2.0"
 rayon = "1.8.0"
-serde = "1.0.190"
+serde = { version = "1.0.190", features = ["derive"] }
+serde-wasm-bindgen = "0.6.1"
+wasm-bindgen = "0.2.88"
 serde_json = "1.0.108"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+cobyla = "0.5.1"
 specta = { version = "1.0.5", features = ["typescript", "export"] }
-tokio = "1.33.0"
-vercel_runtime = "1.1.0"
 
 [lib]
 path = "src-rs/lib.rs"
+crate-type = ["cdylib", "rlib"]
 
 [[bin]]
 name = "optimize"
 path = "src-rs/optimize.rs"
 
 [[bin]]
-name = "graph"
-path = "api/graph.rs"
+name = "gen-types"
+path = "src-rs/gen-types.rs"

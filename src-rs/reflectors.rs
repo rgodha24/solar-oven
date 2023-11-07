@@ -1,8 +1,10 @@
 use crate::Design;
 use serde::{Deserialize, Serialize};
-use specta::Type;
+use wasm_bindgen::prelude::wasm_bindgen;
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Type)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen]
+#[cfg_attr(not(target_arch = "wasm32"), derive(specta::Type))]
 pub enum ReflectorType {
     Rectangular,
     Trapezoidal,

@@ -1,7 +1,9 @@
 #[macro_export]
 macro_rules! common {
     ($ty:ident, $($name:ident, $pretty:expr);+) => {
-        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize, specta::Type)]
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+        #[wasm_bindgen::prelude::wasm_bindgen]
+        #[cfg_attr(not(target_arch = "wasm32"), derive(specta::Type))]
         pub enum $ty {
             $($name),+
         }

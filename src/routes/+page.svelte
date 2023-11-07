@@ -1,19 +1,24 @@
 <script lang="ts">
-	import { getGraphData } from '$lib';
+	import { getData } from '$lib';
+	import {
+		Absorber,
+		WindowMaterial,
+		Insulator,
+		BodyMaterial,
+		ReflectorType,
+		ReflectiveMaterial
+	} from 'solar-oven';
 
-	const data = getGraphData({
-		oven: ['BCS', 'DoubleMylar', 'C', 'C', 'FG30', 'Trapezoidal', 'TF', 4],
-		reflector_ml: 3,
-		data_type: 'Score'
+	const data = getData({
+		abs: 'BCS',
+		window: 'DoubleMylar',
+		insulator: 'FG30',
+		inner_body: 'W16',
+		outer_body: 'W16',
+		reflector_type: 'Trapezoidal',
+		reflector_number: 4,
+		reflective_material: 'TF'
 	});
-</script>
 
-{#await data}
-	loading...
-{:then d}
-	{#each d as item}
-		<p>{JSON.stringify(item)}</p>
-	{/each}
-{:catch e}
-	{JSON.stringify(e)}
-{/await}
+	console.log(data);
+</script>
