@@ -109,7 +109,10 @@ impl Design {
         let tio = self.predicted_tio();
         let cost = self.total_cost();
 
-        // we want to get to at least 400F to cook the food correctly
+        // we want to get to at least 400F to cook the food correctly, 
+        // but we set the goal at 482F because it doesn't make a big difference
+        // on cost, and we don't want to leave performance on the table for a tiny
+        // cost improvement
         (GOAL_TIO - tio).abs() + cost * 4.
 
         // ((tio - AMBIENT) / cost).recip()
