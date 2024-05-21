@@ -18,10 +18,10 @@ impl Design {
         // outer_volume = (h + i_b_t + i_t) * (l_and_w + i_b_t * 2 + i_t * 2) ^ 2
         // insulator_volume = outer_volume - inner_volume
 
-        let inner_volume = (self.h + self.inner_body.thickness())
-            * (self.l_and_w + self.inner_body.thickness() * 2.).powi(2);
-        let outer_volume = (self.h + self.inner_body.thickness() + self.insulator_thickness)
-            * (self.l_and_w + self.inner_body.thickness() * 2. + self.insulator_thickness * 2.)
+        let inner_volume = (self.h + self.inner_body.thickness_cm())
+            * (self.l_and_w + self.inner_body.thickness_cm() * 2.).powi(2);
+        let outer_volume = (self.h + self.inner_body.thickness_cm() + self.insulator_thickness)
+            * (self.l_and_w + self.inner_body.thickness_cm() * 2. + self.insulator_thickness * 2.)
                 .powi(2);
 
         let insulator_volume = outer_volume - inner_volume;
@@ -32,11 +32,11 @@ impl Design {
     fn outer_body_cost(&self) -> f64 {
         // top side window isn't made out of `outer_body` material
         // surface area - aw
-        let h = self.h + self.inner_body.thickness() + self.insulator_thickness;
+        let h = self.h + self.inner_body.thickness_cm() + self.insulator_thickness;
         let l = self.l_and_w
-            + self.inner_body.thickness() * 2.
+            + self.inner_body.thickness_cm() * 2.
             + self.insulator_thickness * 2.
-            + self.outer_body.thickness() * 2.;
+            + self.outer_body.thickness_cm() * 2.;
         let w = l.clone();
 
         let surface_area = 2. * h * l + 2. * h * w + 2. * l * w;

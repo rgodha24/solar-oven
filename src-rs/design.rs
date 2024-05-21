@@ -36,8 +36,9 @@ impl Design {
     fn usb(&self) -> f64 {
         // (x1/k1 + x2/k2 + x3/k3)^-1
 
+        // intentionally using inches
         let iw = self.inner_body.thickness() / self.inner_body.conductivity();
-        let c = self.insulator_thickness / self.insulator.conductivity();
+        let c = self.insulator_thickness_in() / self.insulator.conductivity();
         let ow = self.outer_body.thickness() / self.outer_body.conductivity();
 
         let sum = iw + c + ow;
@@ -109,11 +110,11 @@ impl Design {
         let tio = self.predicted_tio();
         let cost = self.total_cost();
 
-        // we want to get to at least 400F to cook the food correctly, 
-        // but we set the goal at 482F because it doesn't make a big difference
+        // we want to get to at least 400F (204C) to cook the food correctly,
+        // but we set the goal at 250C because it doesn't make a big difference
         // on cost, and we don't want to leave performance on the table for a tiny
         // cost improvement
-        (GOAL_TIO - tio).abs() + cost * 4.
+        (GOAL_TIO - tio).abs() + cost * 2.
 
         // ((tio - AMBIENT) / cost).recip()
 
@@ -125,6 +126,10 @@ impl Design {
         let cost = self.total_cost();
 
         (tio - AMBIENT) / cost
+    }
+
+    pub fn insulator_thickness_in(&self) -> f64 {
+        self.insulator_thickness / 2.54
     }
 }
 

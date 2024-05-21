@@ -131,6 +131,10 @@ macro_rules! impl_body {
                     )+
                 }
             }
+
+            pub fn thickness_cm(&self) -> f64 {
+                self.thickness() * 2.54
+            }
         }
     };
 }
